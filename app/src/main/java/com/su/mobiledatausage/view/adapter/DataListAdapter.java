@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.su.mobiledatausage.R;
-import com.su.mobiledatausage.model.DataModel;
+import com.su.mobiledatausage.model.DataUsageModel;
 
 import java.util.List;
 
@@ -19,9 +19,9 @@ import butterknife.ButterKnife;
 
 public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataViewHolder> {
 
-    private List<DataModel> dataList;
+    private List<DataUsageModel> dataList;
 
-    public DataListAdapter(List<DataModel> dataList) { this.dataList = dataList; }
+    public DataListAdapter(List<DataUsageModel> dataList) { this.dataList = dataList; }
 
     @NonNull
     @Override
@@ -40,9 +40,9 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataVi
         return dataList.size();
     }
 
-    public void updateCountries(List<DataModel> newCountries) {
+    public void updateCountries(List<DataUsageModel> newDataList) {
         dataList.clear();
-        dataList.addAll(newCountries);
+        dataList.addAll(newDataList);
         notifyDataSetChanged();
     }
 
@@ -62,7 +62,7 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataVi
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(DataModel dataModel) {
+        void bind(DataUsageModel dataModel) {
             quarterTextField.setText("Total data usage of " + dataModel.getQuarter() + " : ");
             dataUsageTextField.setText(dataModel.getMobile_data());
         }

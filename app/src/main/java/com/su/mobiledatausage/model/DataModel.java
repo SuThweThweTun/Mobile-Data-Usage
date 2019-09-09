@@ -1,34 +1,45 @@
 package com.su.mobiledatausage.model;
 
-public class DataModel {
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 
-    private int id;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-    private String mobile_data;
+public class DataModel implements Serializable {
 
-    private String quarter;
+    @SerializedName("result")
+    private JsonObject result;
 
-    private boolean image;
+    private List<DataUsageModel> modelList;
 
-    public DataModel(int id, String mobile_data, String quarter) {
-        this.id = id;
-        this.mobile_data = mobile_data;
-        this.quarter = quarter;
+
+    public JsonObject getRes() {
+        return result;
     }
 
-    public int getId() {
-        return id;
+    public List<DataUsageModel> getModelList(JsonObject result) {
+        modelList = new ArrayList<>();
+        DataUsageModel model;
+        JsonObject obj;
+
+        JsonArray records = result.getAsJsonArray("records");
+        for (int i = 0; i < records.size(); i++) {
+            model = new DataUsageModel();
+
+            obj = records.get(i).getAsJsonObject();
+
+            model.setId(obj.get("_id").getAsInt());
+            model.setMobile_data(obj.get("volume_of_mobile_data").getAsString());
+            model.setQuarter(obj.get("quarter").getAsString());
+
+            modelList.add(model);
+        }
+
+
+        return modelList;
     }
 
-    public String getMobile_data() {
-        return mobile_data;
-    }
-
-    public String getQuarter() {
-        return quarter;
-    }
-
-    public boolean isImage() {
-        return image;
-    }
 }

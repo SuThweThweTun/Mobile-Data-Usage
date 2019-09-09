@@ -1,20 +1,29 @@
 package com.su.mobiledatausage.viewmodel;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.gson.JsonObject;
 import com.su.mobiledatausage.model.DataModel;
+import com.su.mobiledatausage.model.DataUsageModel;
+import com.su.mobiledatausage.service.DataService;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.CompositeDisposable;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListViewModel extends ViewModel {
 
-    public MutableLiveData<List<DataModel>> dataList = new MutableLiveData<>();
+    public MutableLiveData<List<DataUsageModel>> dataList = new MutableLiveData<>();
     public MutableLiveData<Boolean> dataLoadError = new MutableLiveData<Boolean>();
     public MutableLiveData<Boolean> loading = new MutableLiveData<Boolean>();
+
+    private DataService service = new DataService().getInstance();
+
+    private CompositeDisposable disposable = new CompositeDisposable();
 
     public ListViewModel() {
         super();
@@ -26,19 +35,34 @@ public class ListViewModel extends ViewModel {
 
     private void fetchData() {
 
-        DataModel model1 = new DataModel(1, "0.000384", "2004-Q1");
-        DataModel model2 = new DataModel(2, "0.0002", "2004-Q2");
-        DataModel model3 = new DataModel(3, "0.0003", "2004-Q3");
-        DataModel model4 = new DataModel(4, "0.0004", "2004-Q4");
+        Call<DataModel> call = service.getData();
 
-        List<DataModel> list = new ArrayList<>();
-        list.add(model1);
-        list.add(model2);
-        list.add(model3);
-        list.add(model4);
+        call.enqueue(new Callback<DataModel>() {
+            @Override
+            public void onResponse(Call<DataModel> call, Response<DataModel> response) {
+                if(response.code() == 200) {
+                    DataModel data = response.body();
 
-        dataList.setValue(list);
-        dataLoadError.setValue(false);
-        loading.setValue(false);
+                    JsonObject result = data.getRes();
+                    List<DataUsageModel> dataUsageList = data.getModelList(result);
+                    dataList.setValue(dataUsageList);
+                    dataLoadError.setValue(false);
+                    loading.setValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DataModel> call, Throwable t) {
+                dataLoadError.setValue(true);
+                loading.setValue(false);
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposable.clear();
     }
 }
