@@ -1,30 +1,21 @@
 package com.su.mobiledatausage.service;
 
+import com.su.mobiledatausage.di.DaggerApiComponent;
 import com.su.mobiledatausage.model.DataModel;
 
-import java.util.List;
+import javax.inject.Inject;
 
-import io.reactivex.Single;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DataService {
 
-    private static final String BASE_URL = "https://data.gov.sg/api/action/";
-
     public static DataService instance;
 
-    public DataAPI api = new Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-            .create(DataAPI.class);
+    @Inject
+    public DataAPI api;
 
     public DataService() {
-
+        DaggerApiComponent.create().inject(this);
     }
 
     public static DataService getInstance() {

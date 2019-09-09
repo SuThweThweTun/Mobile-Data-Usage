@@ -4,11 +4,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.gson.JsonObject;
+import com.su.mobiledatausage.di.DaggerApiComponent;
 import com.su.mobiledatausage.model.DataModel;
 import com.su.mobiledatausage.model.DataUsageModel;
 import com.su.mobiledatausage.service.DataService;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
@@ -21,12 +24,14 @@ public class ListViewModel extends ViewModel {
     public MutableLiveData<Boolean> dataLoadError = new MutableLiveData<Boolean>();
     public MutableLiveData<Boolean> loading = new MutableLiveData<Boolean>();
 
-    private DataService service = new DataService().getInstance();
+    @Inject
+    public DataService service;
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
     public ListViewModel() {
         super();
+        DaggerApiComponent.create().inject(this);
     }
 
     public void refresh() {
