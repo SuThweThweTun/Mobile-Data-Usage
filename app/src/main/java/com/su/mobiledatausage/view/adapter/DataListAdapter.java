@@ -40,7 +40,7 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataVi
         return dataList.size();
     }
 
-    public void updateCountries(List<DataUsageModel> newDataList) {
+    public void updateData(List<DataUsageModel> newDataList) {
         dataList.clear();
         dataList.addAll(newDataList);
         notifyDataSetChanged();
