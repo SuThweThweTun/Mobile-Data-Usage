@@ -51,8 +51,6 @@ public class DataModel implements Serializable {
             model.setMobile_data(mobile_data);
             model.setQuarter(quarter);
 
-//            modelList.add(model);
-
             //get Year
             tokens = new StringTokenizer(quarter, "-");
             year = tokens.nextToken();
@@ -77,45 +75,32 @@ public class DataModel implements Serializable {
             modelList.add(model1);
         }
 
-        Log.e("before", "return list");
         return modelList;
     }
 
     private DataUsageModel calculateTotalDataUsage(int year, List<DataUsageModel> dataUsageModels) {
         double volume = 0.0;
-        Log.e("Year", String.valueOf(year));
+        double max_volume = 0.0;
+        double mobile_data;
+        boolean show_image = false;
 
         for (int i = 0; i < dataUsageModels.size(); i++) {
-            Log.e("volume", String.valueOf(volume));
-            volume = volume + Double.valueOf(dataUsageModels.get(i).getMobile_data());
+            mobile_data = Double.valueOf(dataUsageModels.get(i).getMobile_data());
+            volume = volume + mobile_data;
+
+
+            if(max_volume < mobile_data)
+                max_volume = mobile_data;
+            else
+                show_image = true;
         }
 
         DataUsageModel model = new DataUsageModel();
         model.setQuarter(String.valueOf(year));
-        model.setMobile_data(String.valueOf(volume));
+        model.setMobile_data(String.format("%.6f", volume));
+        model.setImage(show_image);
 
         return model;
     }
-
-    /*public List<DataUsageModel> getModelList(JsonObject result) {
-        modelList = new ArrayList<>();
-        DataUsageModel model;
-        JsonObject obj;
-
-        JsonArray records = result.getAsJsonArray("records");
-        for (int i = 0; i < records.size(); i++) {
-            model = new DataUsageModel();
-
-            obj = records.get(i).getAsJsonObject();
-
-            model.setId(obj.get("_id").getAsInt());
-            model.setMobile_data(obj.get("volume_of_mobile_data").getAsString());
-            model.setQuarter(obj.get("quarter").getAsString());
-
-            modelList.add(model);
-        }
-
-        return modelList;
-    }*/
 
 }

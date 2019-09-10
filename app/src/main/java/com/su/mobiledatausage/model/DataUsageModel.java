@@ -17,8 +17,13 @@ public class DataUsageModel implements Serializable {
 
     private boolean image;
 
-    public int getId() {
-        return id;
+    public DataUsageModel() {
+    }
+
+    public DataUsageModel(String mobile_data, String quarter, boolean image) {
+        this.mobile_data = mobile_data;
+        this.quarter = quarter;
+        this.image = image;
     }
 
     public String getMobile_data() {
@@ -29,7 +34,7 @@ public class DataUsageModel implements Serializable {
         return quarter;
     }
 
-    public boolean isImage() {
+    public boolean getImage() {
         return image;
     }
 

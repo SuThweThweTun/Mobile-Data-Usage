@@ -63,8 +63,10 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.DataVi
         }
 
         void bind(DataUsageModel dataModel) {
-            quarterTextField.setText("Total data usage of " + dataModel.getQuarter() + " : ");
-            dataUsageTextField.setText(dataModel.getMobile_data());
+            quarterTextField.setText("Total Data usage of " + dataModel.getQuarter() + " : ");
+            dataUsageTextField.setText(dataModel.getMobile_data() + " PB");
+
+            imageView.setVisibility((dataModel.getImage()) ? View.VISIBLE : View.INVISIBLE);
         }
     }
 }

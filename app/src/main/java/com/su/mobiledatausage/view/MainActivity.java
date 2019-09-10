@@ -1,13 +1,20 @@
 package com.su.mobiledatausage.view;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    Context context = this;
 
     @BindView(R.id.dataList)
     RecyclerView dataList;
@@ -36,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private ListViewModel viewModel;
     private DataListAdapter adapter = new DataListAdapter(new ArrayList<>());
 
+    View childView;
+    int recyclerViewItemPosition;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +59,44 @@ public class MainActivity extends AppCompatActivity {
 
         dataList.setLayoutManager(new LinearLayoutManager(this));
         dataList.setAdapter(adapter);
+
+        dataList.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+
+            GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override public boolean onSingleTapUp(MotionEvent motionEvent) {
+                    return true;
+                }
+            });
+
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView recyclerView, @NonNull MotionEvent motionEvent) {
+                childView = recyclerView.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
+                if(childView != null && gestureDetector.onTouchEvent(motionEvent)) {
+
+                    recyclerViewItemPosition = recyclerView.getChildAdapterPosition(childView);
+
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(context)
+                            .setTitle("Info")
+                            .setMessage("Mobile data usage was decreased in some quarters of this year.")
+                            .setPositiveButton(android.R.string.yes, (dialog1, which) -> dialog1.cancel())
+                            .setIcon(android.R.drawable.ic_menu_info_details);
+
+                    dialog.show();
+                }
+
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
 
         observerViewModel();
     }
