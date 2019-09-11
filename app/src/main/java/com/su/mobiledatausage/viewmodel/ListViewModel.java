@@ -54,6 +54,10 @@ public class ListViewModel extends ViewModel {
                     dataLoadError.setValue(false);
                     loading.setValue(false);
                 }
+                else{
+                    dataLoadError.setValue(true);
+                    loading.setValue(false);
+                }
             }
 
             @Override

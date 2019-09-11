@@ -3,16 +3,12 @@ package com.su.mobiledatausage.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,7 +20,6 @@ import com.su.mobiledatausage.view.adapter.DataListAdapter;
 import com.su.mobiledatausage.viewmodel.ListViewModel;
 
 import java.util.ArrayList;
-import java.util.Observable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,10 +1,7 @@
 package com.su.mobiledatausage.di;
 
-import android.provider.ContactsContract;
-
 import com.su.mobiledatausage.service.DataAPI;
 import com.su.mobiledatausage.service.DataService;
-import com.su.mobiledatausage.viewmodel.ListViewModel;
 
 import dagger.Module;
 import dagger.Provides;
